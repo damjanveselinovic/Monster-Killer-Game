@@ -129,25 +129,31 @@ function endRound() {
 }
 
 function attackMonster(typeOfAttack) {
+
+  //Ternary operator:
+  //skracivanje koda i if statementa
+  const maxDamage=typeOfAttack==MODE_ATTACK ? ATTACK_VALUE:STRONG_ATTACK_VALUE;
+  const logEvent=typeOfAttack==MODE_ATTACK ? LOG_EVENT_PLAYER_ATTACK: LOG_EVENT_PLAYER_STRONG_ATTACK;
+
+  /*
+  let maxDamage;
+  let logEvent;
   if (typeOfAttack == MODE_ATTACK) {
-    const damage = dealMonsterDamage(ATTACK_VALUE);
-    currentMonsterHealth -= damage;
-    writeToLog(
-      LOG_EVENT_PLAYER_ATTACK,
-      damage,
-      currentMonsterHealth,
-      currentPlayerHealth
-    );
-  } else {
-    const damage = dealMonsterDamage(STRONG_ATTACK_VALUE);
-    currentMonsterHealth -= damage;
-    writeToLog(
-      LOG_EVENT_PLAYER_STRONG_ATTACK,
-      damage,
-      currentMonsterHealth,
-      currentPlayerHealth
-    );
-  }
+    maxDamage == ATTACK_VALUE;
+    logEvent == LOG_EVENT_PLAYER_ATTACK;
+  } else if (typeOfAttack == MODE_STRONG_ATTACK) {
+    maxDamage == STRONG_ATTACK_VALUE;
+    logEvent == LOG_EVENT_PLAYER_STRONG_ATTACK;
+  }*/
+
+  const damage = dealMonsterDamage(maxDamage);
+  currentMonsterHealth -= damage;
+  writeToLog(
+    logEvent, 
+    damage, 
+    currentMonsterHealth, 
+    currentPlayerHealth
+  );
 
   //Monster attacking back automatically
   endRound();
@@ -199,13 +205,17 @@ function healPlayerHandler() {
   }
   increasePlayerHealth(healValue);
   currentPlayerHealth += healValue;
-  writeToLog(LOG_EVENT_PLAYER_HEAL, healValue, currentMonsterHealth, currentPlayerHealth);
+  writeToLog(
+    LOG_EVENT_PLAYER_HEAL,
+    healValue,
+    currentMonsterHealth,
+    currentPlayerHealth
+  );
   endRound(); //primamo udarac od monstera i posle heala, da ne pozivamo fju onda bismo mogli da se healujemo vecno
 }
 
 function printLogHandler() {
   console.log(battleLog);
-  
 }
 
 attackBtn.addEventListener("click", attackHandler);
